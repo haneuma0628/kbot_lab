@@ -5,13 +5,13 @@ date_default_timezone_set('Asia/Tokyo'); // time_zone
 require_once('/var/www/html/twitteroauth/twitteroauth.php');
 require_once('/var/www/html/kbot_lab/config.php');
 
-$oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET); //twitterOAuthのオブジェクトを生成
+$oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 /*---------- define ----------*/
 // 卒研発表会までの残り日数
 $today = (int) date("d");
 $limit = (date("m")==01)? 27-$today: NULL;
-// 定型文
+
 //$head = "先輩、";
 $rand_bool = rand(0,1);
 $rand_randmesse = rand(0,10);
@@ -21,7 +21,7 @@ $rand_randmesse = rand(0,10);
 /**
  ** データベースからメッセージ持ってきたいね
  **/
-// ランダムなメッセージ
+// ランダム
 $m_rand[0] = "中間発表から進展あったんですか？";
 $m_rand[1] = "先輩、パソコンに向かってるだけで研究進めた気になってちゃだめですよ？";
 $m_rand[2] = "先輩、エナジードリンク飲めば卒研進むとでも思ってるんですか？";
@@ -34,32 +34,23 @@ $m_rand[8] = "先輩、今まで一体何をしていたんですか？";
 $m_rand[9] = "先輩、今日も遅くまで研究室に残ってるんですね。研究熱心なんですか？それとも研究が進まなくて残るしかないんですか？";
 $m_rand[10] = "先輩、たまにはゆっくり休んでくださいね。";
 
-// 深夜のメッセージ
+// 深夜
 $m_midnight[0] ="こんな時間まで起きて作業してるんですか？進まない卒研に電気代かけるのは勿体ないじゃないですか…日のあるうちに作業してください…";
 $m_midnight[1] ="徹夜でコード書くって言ってますけど、時間を区切ってちゃんと睡眠とった方が集中できますよ？";
 
-// 朝のメッセージ
+// 朝
 $m_morning[0] = "先輩、おはようございます。まだ寝てるんですか？早く起きてください。起きて研究室に行ってください。研究室で現実と向き合ってください。";
 /*---------- メッセージを配列に格納 ----------*/
 
-// debug
-//$message = $m_rand[$rand_randmesse];
-//var_dump($message);
-// debug
-
 if (date("H")==10 && $limit!=NULL) {
-// 卒研発表会まで残り日数をpost
-  $limit = strtoupper((string) gmp_strval($limit, 16));
-  $message = "卒研発表会まで残り". $limit. "(16)日ですね。";
+   $limit = strtoupper((string) gmp_strval($limit, 16));
+   $message = "卒研発表会まで残り". $limit. "(16)日ですね。";
 } else if (date("H")==8) {
-// 午前8時におはようメッセージをpost
    $message = $m_morning[0];
 } else if (date("H")==0){
-// 午前0時に毒舌orデレをpost
    $message = $m_midnight[$rand_bool];
 } else {
-// それ以外はランダムなメッセージをpost
-  $message = $m_rand[$rand_randmesse];
+   $message = $m_rand[$rand_randmesse];
 }
 
 var_dump($limit);
