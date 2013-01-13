@@ -75,10 +75,11 @@ if (date("H")==10 && $limit!=NULL) {
 var_dump($limit);
 
 // messageをテンプレートにつっこんでtwitterでpost
-$tweet = array( "status" => $message );
+/*$tweet = array( "status" => $message );
 $result = $oauth->post('statuses/update', $tweet);
 // debug
 var_dump($result);
+*/
 
 // mention取得テスト
 $mentions = $oauth->get('statuses/mentions_timeline');
