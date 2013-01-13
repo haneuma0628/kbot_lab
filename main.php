@@ -17,16 +17,6 @@ $rand_bool = rand(0,1);
 $rand_randmesse = rand(0,10);
 /*---------- /define const ----------*/
 
-// データベースごにょごにょ //テストなう
-//$pdo = new PDO("mysql:dbname=kbot_lab;port=10013", "dbuser", "sider5821");　// pdoオブジェクトを生成
-//var_dump($pdo);
-/*$st = $pdo->query("SELECT * FROM message"); // SQL文の発行
-$i = 0;
-while ($row = $st->fetch()) {
-  $messe_from_db[$i] = $row['text']l
-    echo $messe_from_db[$i];
-}
-
 /*---------- メッセージを配列に格納 ----------*/
 /**
  ** データベースからメッセージ持ってきたいね
@@ -59,7 +49,8 @@ $m_morning[0] = "先輩、おはようございます。まだ寝てるんです
 
 if (date("H")==10 && $limit!=NULL) {
 // 卒研発表会まで残り日数をpost
-   $message = "卒研発表会まで残り". gmp_strval($limit, 16). "(16)日ですね。";
+  $limit = strtoupper((string) gmp_strval($limit, 16));
+  $message = "卒研発表会まで残り". $limit. "(16)日ですね。";
 } else if (date("H")==8) {
 // 午前8時におはようメッセージをpost
    $message = $m_morning[0];
@@ -71,16 +62,12 @@ if (date("H")==10 && $limit!=NULL) {
   $message = $m_rand[$rand_randmesse];
 }
 
-//var_dump($message);
+var_dump($limit);
 
 // messageをテンプレートにつっこんでtwitterでpost
 $tweet = array( "status" => $message );
 $result = $oauth->post('statuses/update', $tweet);
 // debug
 var_dump($result);
-
-// mention取得テスト
-$mentions = $oauth->get('statuses/mentions_timeline');
-var_dump($mentions);
 
 ?>
