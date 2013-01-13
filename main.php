@@ -1,16 +1,9 @@
 <?php
-ini_set( 'display_errors', 1 );
 date_default_timezone_set('Asia/Tokyo'); // time_zone
 
 // include
 require_once('/var/www/html/twitteroauth/twitteroauth.php');
 require_once('/var/www/html/kbot_lab/config.php');
-
-/**
-* OAuthオブジェクト生成
-* tweetの中身を配列につっこむ
-* post('statuses/update', '$array')関数でpostする
-**/
 
 $oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET); //twitterOAuthのオブジェクトを生成
 
@@ -35,6 +28,9 @@ while ($row = $st->fetch()) {
 }
 
 /*---------- メッセージを配列に格納 ----------*/
+/**
+ ** データベースからメッセージ持ってきたいね
+ **/
 // ランダムなメッセージ
 $m_rand[0] = "中間発表から進展あったんですか？";
 $m_rand[1] = "先輩、パソコンに向かってるだけで研究進めた気になってちゃだめですよ？";
@@ -78,12 +74,10 @@ if (date("H")==10 && $limit!=NULL) {
 //var_dump($message);
 
 // messageをテンプレートにつっこんでtwitterでpost
-/*
 $tweet = array( "status" => $message );
 $result = $oauth->post('statuses/update', $tweet);
 // debug
 var_dump($result);
-*/
 
 // mention取得テスト
 $mentions = $oauth->get('statuses/mentions_timeline');
