@@ -15,7 +15,7 @@ $limit = (date("m")==01)? 27-$today: NULL;
 //$head = "先輩、";
 $rand_bool = rand(0,1);
 $rand_randmesse = rand(0,10);
-/*---------- /define const ----------*/
+/*---------- /define ----------*/
 
 /*---------- メッセージを配列に格納 ----------*/
 /**
