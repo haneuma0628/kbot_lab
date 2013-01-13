@@ -53,8 +53,6 @@ if (date("H")==10 && $limit!=NULL) {
    $message = $m_rand[$rand_randmesse];
 }
 
-var_dump($limit);
-
 // messageをテンプレートにつっこんでtwitterでpost
 $tweet = array( "status" => $message );
 $result = $oauth->post('statuses/update', $tweet);
