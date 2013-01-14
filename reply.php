@@ -19,13 +19,14 @@ if (!$_SESSION['id']) {$_SESSION['id'] = 0;}
 foreach ($mentions as $tweet) {
   //  var_dump ($tweet); echo "<br>"; echo "<br>";
   $tweet_id = $tweet->id;
+  //echo "id**" .$tweet_id ."<br>";
+  //echo $tweet->text ."<br>";
   if ($_SESSION['id'] < $tweet_id) {
     $mention_to = "@" .$tweet->user->screen_name;
     $mention_name = $tweet->user->name;
     // 文字列検索
     $str = $tweet->text;
-    $keyword = "励まして";
-    $pos = strpos($str, $keyword);
+    $keyword = "励まして"; $pos = strpos($str, $keyword);
     // /文字列検索
     if ($pos) {
       $message = " " .$mention_name ."先輩、卒研頑張ってください。";
@@ -33,10 +34,14 @@ foreach ($mentions as $tweet) {
       $message = " 何ですか、" .$mention_name ."先輩。";
     }
     $post_tweet = array( "status" => $mention_to .$message);
+var_dump($post_tweet);
     $result = $oauth->post('statuses/update', $post_tweet);
     var_dump($result);
 
     $_SESSION['id'] = $tweet_id;
   }
 }
+
+//echo "SESSION**" .$_SESSION['id'] ."<br>";
+
 ?>
