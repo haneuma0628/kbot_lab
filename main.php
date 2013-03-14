@@ -8,13 +8,12 @@ require_once('/var/www/html/kbot_lab/config.php');
 $oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 /*---------- define ----------*/
-// 卒研発表会までの残り日数
-$today = (int) date("d");
-$limit = (date("m")==01)? 27-$today: NULL;
+// 卒研発表会までの残り日数(FNCT.H24)
+//$today = (int) date("d");
+//$limit = (date("m")==01)? 27-$today: NULL;
 
-//$head = "先輩、";
 $rand_bool = rand(0,1);
-$rand_randmesse = rand(0,11);
+$rand_mrand = rand(0,11);
 /*---------- /define ----------*/
 
 /*---------- メッセージを配列に格納 ----------*/
@@ -33,7 +32,7 @@ $m_rand[7] = "その研究、去年の卒研室の先輩の研究と何が違う
 $m_rand[8] = "先輩、今まで一体何をしていたんですか？";
 $m_rand[9] = "先輩、今日も遅くまで研究室に残ってるんですね。研究熱心なんですか？それとも研究が進まなくて残るしかないんですか？";
 $m_rand[10] = "先輩、たまにはゆっくり休んでくださいね。";
-$m_rand[11] = "先輩、その研究って新規性も有用性もありませんよね？"
+$m_rand[11] = "先輩、その研究って新規性も有用性もありませんよね？";
 
 // 深夜
 $m_midnight[0] ="こんな時間まで起きて作業してるんですか？進まない卒研に電気代かけるのは勿体ないじゃないですか…日のあるうちに作業してください…";
@@ -43,6 +42,8 @@ $m_midnight[1] ="徹夜でコード書くって言ってますけど、時間を
 $m_morning[0] = "先輩、おはようございます。まだ寝てるんですか？早く起きてください。起きて研究室に行ってください。研究室で現実と向き合ってください。";
 /*---------- メッセージを配列に格納 ----------*/
 
+// 卒研発表会までの残り日数をアレしてた部分
+/*
 if (date("H")==10 && $limit!=NULL) {
    $limit = strtoupper((string) gmp_strval($limit, 16));
    if($limit != "1"){
@@ -50,12 +51,15 @@ if (date("H")==10 && $limit!=NULL) {
    } else {
       $message = "先輩、明日は卒研発表会ですね。悔いの残らない発表になるように、今日1日頑張ってくださいね。";
    }
-} else if (date("H")==8) {
+}
+*/
+
+if (date("H")==8) {
    $message = $m_morning[0];
 } else if (date("H")==0){
    $message = $m_midnight[$rand_bool];
 } else {
-   $message = $m_rand[$rand_randmesse];
+   $message = $m_rand[$rand_mrand];
 }
 
 // messageをテンプレートにつっこんでtwitterでpost
