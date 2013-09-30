@@ -8,11 +8,17 @@ require_once('/var/www/html/kbot_lab/config.php');
 $oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 /*---------- define ----------*/
+<<<<<<< HEAD
 $today = (int) date("d");
 // 卒研発表会までの残り日数(FNCT.H24)
 //$limit = (date("m")==01)? 27-$today: NULL;
 // 卒研中間発表までの残り日数(FNCT.H25)
 $limit = (date("m")==10)? 31-$today: NULL;
+=======
+// 卒研発表会までの残り日数(FNCT.H24)
+//$today = (int) date("d");
+//$limit = (date("m")==01)? 27-$today: NULL;
+>>>>>>> origin/master
 
 $rand_bool = rand(0,1);
 $rand_mrand = rand(0,11);
@@ -43,6 +49,7 @@ $m_midnight[1] ="徹夜でコード書くって言ってますけど、時間を
 // 朝
 $m_morning[0] = "先輩、おはようございます。まだ寝てるんですか？早く起きてください。起きて研究室に行ってください。研究室で現実と向き合ってください。";
 /*---------- メッセージを配列に格納 ----------*/
+<<<<<<< HEAD
 // 残り日数表示機能
 if (date("H")==10 && $limit!=NULL) {
    $limit = strtoupper((string) gmp_strval($limit, 16));
@@ -54,6 +61,20 @@ if (date("H")==10 && $limit!=NULL) {
    }
 }
 
+=======
+
+// 卒研発表会までの残り日数をアレしてた部分
+/*
+if (date("H")==10 && $limit!=NULL) {
+   $limit = strtoupper((string) gmp_strval($limit, 16));
+   if($limit != "1"){
+      $message = "卒研発表会まで残り". $limit. "(16)日ですね。";
+   } else {
+      $message = "先輩、明日は卒研発表会ですね。悔いの残らない発表になるように、今日1日頑張ってくださいね。";
+   }
+}
+*/
+>>>>>>> origin/master
 
 if (date("H")==8) {
    $message = $m_morning[0];
