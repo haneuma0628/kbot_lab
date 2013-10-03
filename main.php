@@ -15,7 +15,6 @@ $today = (int) date("d");
 //$limit = (date("m")==01)? 27-$today: NULL;
 // 卒研中間発表までの残り日数(FNCT.H25)
 $limit = (date("m")==10)? 31-$today: NULL;
-
 $randNo = rand(0,count($messageArray["normal"])-1);
 $randNi = rand(0,count($messageArray["night"])-1);
 /*---------- /define ----------*/
@@ -34,7 +33,7 @@ if (date("H")==8) {
   }
 } else {
   $message = $messageArray["normal"][$randNo];
-}
+
 
 // messageをテンプレートにつっこんでtwitterでpost
 $tweet = array( "status" => $message );
