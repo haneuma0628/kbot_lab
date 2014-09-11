@@ -8,7 +8,7 @@ require_once('/var/www/html/kbot_lab/config.php');
 $oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
 /*---------- define ----------*/
-$messageArray = yaml_parse_file("/var/www/html/kbot_lab/message.yml");
+$messageArray = yaml_parse_file("/var/www/html/kbot_lab/message_main.yml");
 $randNo = rand(0,count($messageArray["normal"])-1);
 $randNi = rand(0,count($messageArray["night"])-1);
 /*---------- /define ----------*/
