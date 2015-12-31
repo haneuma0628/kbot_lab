@@ -4,6 +4,7 @@ date_default_timezone_set("Asia/Tokyo"); // time_zone
 // include
 require_once("/var/www/html/twitteroauth/twitteroauth.php");
 require_once("/var/www/html/hassakutea/kbot_lab/config.php");
+require_once("/var/www/html/hassakutea/kbot_lab/mecab.php");
 
 $oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
@@ -42,8 +43,12 @@ foreach ($mentions as $mention) {
       $reply_text = $reply_name."先輩、".$messages["hagemashi"][$num];
 
     } else {
-      $num = rand(0, count($messages["none"])-1);
-      $reply_text = $reply_name."先輩、".$messages["none"][$num];
+      $main_parse = yaml_parse_file("/var/www/html/hassakutea/kbot_lab/message_main.yml");
+      $replay_parse = yaml_parse_file("/var/www/html/hassakutea/kbot_lab/message_reply.yml");
+      $messages = array();
+      foreach ($main_parse as $ary) $messages = array_merge($messages, $ary);
+      $messages = array_merge($messages, $replay_parse["none"]);
+      $reply_text = markov($messages);
     }
 
     $reply = array(

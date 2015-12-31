@@ -1,9 +1,7 @@
 <?php
-$message_file = yaml_parse_file("/var/www/html/hassakutea/kbot_lab/message_main.yml");
-
+function markov($messages) {
 // テーブル作成
-$table = array();
-foreach ($message_file as $messages) {
+	$table = array();
 	foreach ($messages as $message) {
 		/* echo $message."\n"; */
 		$words = mecab_split($message);
@@ -17,29 +15,40 @@ foreach ($message_file as $messages) {
 			$i++;
 		}
 	}
-}
 
-$keys = array_keys($table);
-$current_w = $keys[array_rand($keys)];
+	$keys = array_keys($table);
+	$current_w = $keys[array_rand($keys)];
 /* echo $current_w; */
-$punc = array('。', '！', '？');
-if (array_search($current_w, $punc) && $current_w == '、') $current_w = array_rand($keys);
-$result = array($current_w);
-
-while (!array_search($current_w, $punc)) {
-	if (count($table[$current_w]) > 1) {
-		$next_w = $table[$current_w][array_rand($table[$current_w])];
-	} else {
-		if (empty($table[$current_w])) {
-			break;
-		} else {
-			$next_w = $table[$current_w][0];
-		}
+	$period = array("。", "！", "？");
+	$punc = array("・", "、", "「", "」");
+	while (array_search($current_w, $period) && array_search($current_w, $punc)) {
+		$current_w = array_rand($keys);
 	}
-	array_push($result, $next_w);
-	$current_w = $next_w;
+	$result = array($current_w);
+
+	while (!array_search($current_w, $period)) {
+		if (count($table[$current_w]) > 1) {
+			$next_w = $table[$current_w][array_rand($table[$current_w])];
+		} else {
+			if (empty($table[$current_w])) {
+				break;
+			} else {
+				$next_w = $table[$current_w][0];
+			}
+		}
+		if ($next_w == false) break;
+		array_push($result, $next_w);
+		$current_w = $next_w;
+	}
+
+	$sentence = implode($result)."\n";
+	return $sentence;
 }
 
-$sentence = implode($result)."\n";
-echo $sentence;
+$message_file = yaml_parse_file("/var/www/html/hassakutea/kbot_lab/message_main.yml");
+$messages = array();
+foreach ($message_file as $ary) {
+	$messages = array_merge($messages, $ary);
+}
+echo markov($messages);
 ?>
