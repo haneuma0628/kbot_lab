@@ -18,7 +18,6 @@ function markov($messages) {
 
 	$keys = array_keys($table);
 	$current_w = $keys[array_rand($keys)];
-/* echo $current_w; */
 	$period = array("。", "！", "？");
 	$punc = array("・", "、", "「", "」");
 	while (array_search($current_w, $period) && array_search($current_w, $punc)) {
