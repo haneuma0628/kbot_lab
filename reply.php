@@ -4,7 +4,7 @@ date_default_timezone_set("Asia/Tokyo"); // time_zone
 // include
 require_once("/var/www/html/twitteroauth/twitteroauth.php");
 require_once("/var/www/html/hassakutea/kbot_lab/config.php");
-require_once("/var/www/html/hassakutea/kbot_lab/mecab.php");
+require_once("/var/www/html/hassakutea/kbot_lab/markov.php");
 
 $oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
