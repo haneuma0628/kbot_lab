@@ -1,73 +1,53 @@
 <?php
 date_default_timezone_set("Asia/Tokyo"); // time_zone
 
-// include
-require_once("/var/www/html/twitteroauth/twitteroauth.php");
-require_once("/var/www/html/hassakutea/kbot_lab/config.php");
-require_once("/var/www/html/hassakutea/kbot_lab/markov.php");
+require_once(realpath(__DIR__ . "/../twitteroauth/twitteroauth.php"));
+require_once(__DIR__ . "/config.php");
+require_once(__DIR__ . "/markov.php");
 
 $oauth = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
 
-// mentionリスト取得
-$mentions = $oauth->get("statuses/mentions_timeline");
-
-// メッセージ取得
-$messages = yaml_parse_file("/var/www/html/hassakutea/kbot_lab/message_reply.yml");
-
-// last_tweet_idから最後に返信したツイートのIDを取得
-$handle = fopen("/var/www/html/hassakutea/kbot_lab/last_tweet_id", "r");
+$handle = fopen(__DIR__ . "/last_replied_id", "r");
 if ($handle) {
-	$lastTweetId = (int)fgets($handle);
+	$last_replied_id = (int)fgets($handle);
 	fclose($handle);
 }
-
-// 最後のツイートIDを記録する用の変数
-$mentionId = 0;
-
-// ログ用
-echo date("--- Y.m.d h:i:s ---")."\n";
-
+$mentions = $oauth->get("statuses/mentions_timeline");
+$unreplied_mentions = array();
 foreach ($mentions as $mention) {
-	//if ($mention->user->screen_name == "hnmx4" && $mention->id > $lastTweetId) {
-	if ($mention->id > $lastTweetId) {
-		echo $mention->user->screen_name.":".$mention->text.":".$mention->id."\n";
+	if ($mention->id > $last_replied_id) {
+		array_push($unreplied_mentions, $mention);
+	}
+}
 
-		$reply_to = $mention->user->screen_name;
-		$reply_name = $mention->user->name;
-
+if (count($unreplied_mentions) > 0) {
+	foreach ($unreplied_mentions as $mention) {
+		$pair = $mention->user;
 		$keyword = "励まし";
 		$pos = strpos($mention->text, $keyword);
-
-		$replay_parse = yaml_parse_file("/var/www/html/hassakutea/kbot_lab/message_reply.yml");
 		if ($pos) {
-			$reply_text = markov($replay_parse["hagemashi"]);
+			$msg = yaml_parse_file(__DIR__ . "/message_reply.yml");
+			$reply_body = $msg["hagemashi"];
 		} else {
-			$main_parse = yaml_parse_file("/var/www/html/hassakutea/kbot_lab/message_main.yml");
-			$messages = array();
-			foreach ($main_parse as $ary) $messages = array_merge($messages, $ary);
-			$messages = array_merge($messages, $replay_parse["none"]);
-			$reply_text = markov($messages);
+			$reply_body = markov();
 		}
 
-			$reply = array(
-			"status" => "@".$reply_to." ".$reply_text,
-				"in_reply_to_status_id" => $mention->id,
-				);
-			$post = $oauth->post('statuses/update', $reply);
+		$reply = array(
+			"status" => "@".$pair->screen_name." ".$reply_body,
+			"in_reply_to_status_id" => $mention->id,
+		);
+		echo date("--- Y.m.d h:i:s ---")."\n";  // ログ用
+		$oauth->post('statuses/update', $reply);
+		var_dump($reply);
+		echo "\n";
+	}
 
-			var_dump($reply)."\n";
-			var_dump($post)."\n";
-			if ($mentionId < $mention->id) $mentionId = $mention->id;
-		}
-		}
-
-			if ($lastTweetId < $mentionId) {
-			$handle = fopen("/var/www/html/hassakutea/kbot_lab/last_tweet_id", "w");
-			if ($handle) {
-			echo "write:".$mentionId."\n";
-			fwrite($handle, $mentionId);
-			fclose($handle);
-		}
-		}
+	$last_mention = $unreplied_mentions[0];
+	$handle = fopen(__DIR__ . "/last_replied_id", "w");
+	if ($handle) {
+		fwrite($handle, $last_mention->id);
+		fclose($handle);
+	}
+}
 
 ?>

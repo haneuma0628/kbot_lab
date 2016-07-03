@@ -1,6 +1,5 @@
 <?php
-
-$message_file = yaml_parse_file("/var/www/html/hassakutea/kbot_lab/message_main.yml");
+$message_file = yaml_parse_file(__DIR__ . "/message_main.yml");
 $messages = array();
 foreach ($message_file as $ary) {
 	$messages = array_merge($messages, $ary);
@@ -9,7 +8,6 @@ foreach ($message_file as $ary) {
 // テーブル作成
 $table = array();
 foreach ($messages as $message) {
-	/* echo $message."\n"; */
 	$words = mecab_split($message);
 	$i = 0;
 	while ($i < count($words)) {
@@ -22,6 +20,6 @@ foreach ($messages as $message) {
 	}
 }
 
-yaml_emit_file("/var/www/html/hassakutea/kbot_lab/table.yml", $table, YAML_UTF8_ENCODING);
+yaml_emit_file(__DIR__ . "/table.yml", $table, YAML_UTF8_ENCODING);
 
 ?>
