@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 
-import dotenv
 import tweepy
 import yaml
 import random
@@ -8,10 +7,7 @@ import datetime
 import pprint
 
 from os.path import join, dirname, abspath
-
-
-def denv(envkey):
-    return dotenv.get_key(join(dirname(__file__), '.env'), envkey)
+from common import denv
 
 
 def hour_to_timezone(hour):
