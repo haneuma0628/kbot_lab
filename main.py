@@ -4,8 +4,6 @@ import tweepy
 import yaml
 import random
 import datetime
-import pprint
-
 from os.path import join, dirname, abspath
 from common import denv
 

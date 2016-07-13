@@ -2,7 +2,6 @@
 
 import tweepy
 import yaml
-
 from os.path import join, dirname, abspath
 from common import denv, markov
 
