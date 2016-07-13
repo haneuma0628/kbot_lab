@@ -30,6 +30,6 @@ f.close()
 hour = int(datetime.datetime.now().hour)
 timezone = hour_to_timezone(hour)
 rnd = int(random.uniform(0, len(msgs[timezone]) - 1))
-msg = msgs[timezone][rnd]
+msg = msgs[timezone][rnd].encode('utf-8')
 
 api.update_status(msg)
