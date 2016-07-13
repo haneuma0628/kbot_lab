@@ -41,6 +41,6 @@ if len(unreplied_mentions) > 0:
         api.update_status(status=reply['status'], in_reply_to_status_id=reply['in_reply_to_status_id'])
 
     last_mention = unreplied_mentions[0]
-    f = open(join(abspath(dir(__file__)), 'last_replied_id'), 'w')
+    f = open(join(abspath(dirname(__file__)), 'last_replied_id'), 'w')
     f.write(last_mention.id)
     f.close()
