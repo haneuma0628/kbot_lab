@@ -23,7 +23,7 @@ def markov():
 
         result = [current_wd]
         while current_wd not in period:
-            next_wd = random.choice(table[current_wd])
+            next_wd = random.choice(table.get(current_wd))
             if not next_wd:
                 break
             result.append(next_wd)
