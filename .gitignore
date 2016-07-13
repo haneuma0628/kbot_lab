@@ -6,3 +6,4 @@
 .env
 last_replied_id
 *.pyc
+table.yml
